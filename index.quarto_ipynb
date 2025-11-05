@@ -1,0 +1,229 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "---\n",
+        "title: \"Finance Data Insights Dashboard\"\n",
+        "author: \"Dr. Olugbenga Asaolu | SI Analytics\"\n",
+        "format:\n",
+        "  dashboard:\n",
+        "    theme: morph\n",
+        "    nav-buttons: [github]\n",
+        "server: shiny\n",
+        "---"
+      ],
+      "id": "24a213d7"
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "context": "setup"
+      },
+      "source": [
+        "import pandas as pd\n",
+        "from shiny import reactive, render, ui\n",
+        "import plotly.express as px"
+      ],
+      "id": "da594d52",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# --- Load Data ---\n",
+        "df = pd.read_csv(\"data\\Finance_data.csv\")\n",
+        "df"
+      ],
+      "id": "c99ee643",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "# Clean basic fields\n",
+        "df.columns = df.columns.str.strip().str.replace(\" \", \"_\")\n",
+        "df['Purpose'] = df['Purpose'].astype(str).str.title()\n",
+        "df['Investment_Avenues'] = df['Investment_Avenues'].astype(str)\n",
+        "df['Stock_Marktet'] = df['Stock_Marktet'].astype(str)\n",
+        "df['Expect'] = df['Expect'].astype(str)"
+      ],
+      "id": "1312d931",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "{.sidebar}\n",
+        "{width=\"80%\"}\n",
+        "\n",
+        "🔍 Filters\n",
+        "ui.input_select(\n",
+        "\"investment_filter\",\n",
+        "\"Investment Avenues (Yes/No):\",\n",
+        "choices=sorted(df[\"Investment_Avenues\"].dropna().unique().tolist()),\n",
+        "selected=\"Yes\"\n",
+        ")"
+      ],
+      "id": "4b5b99dc",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "ui.input_slider(\n",
+        "\"age_filter\",\n",
+        "\"Select Age Range:\",\n",
+        "min=int(df[\"age\"].min()),\n",
+        "max=int(df[\"age\"].max()),\n",
+        "value=(20, 40),\n",
+        "step=1\n",
+        ")\n",
+        "\n",
+        "ui.input_select(\n",
+        "\"purpose_filter\",\n",
+        "\"Select Purpose:\",\n",
+        "choices=sorted(df[\"Purpose\"].dropna().unique().tolist()),\n",
+        "selected=\"Wealth Creation\"\n",
+        ")"
+      ],
+      "id": "8d4e329b",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "@reactive.calc\n",
+        "def filtered_data():\n",
+        "dff = df.copy()\n",
+        "dff = dff[dff[\"Investment_Avenues\"] == input.investment_filter()]\n",
+        "dff = dff[(dff[\"age\"] >= input.age_filter()[0]) & (dff[\"age\"] <= input.age_filter()[1])]\n",
+        "dff = dff[dff[\"Purpose\"] == input.purpose_filter()]\n",
+        "return dff"
+      ],
+      "id": "8780962c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "📊 Dashboard Overview\n",
+        "@render.ui\n",
+        "def value_cards():\n",
+        "dff = filtered_data()\n",
+        "total_resp = len(dff)\n",
+        "top_option = dff[['Mutual_Funds','Equity_Market','Debentures','Government_Bonds',\n",
+        "'Fixed_Deposits','PPF','Gold']].mean().idxmin().replace('_',' ')\n",
+        "actual_avenue = dff['Avenue'].mode()[0] if not dff['Avenue'].mode().empty else \"N/A\"\n",
+        "stock_perc = round((dff['Stock_Marktet'].str.lower().eq('yes').mean())*100,1)\n",
+        "top_expect = dff['Expect'].mode()[0] if not dff['Expect'].mode().empty else \"N/A\"\n",
+        "\n",
+        "return ui.layout_columns(\n",
+        "    ui.value_box(\"👥 Respondents\", f\"{total_resp}\"),\n",
+        "    ui.value_box(\"💰 Preferred Investment\", top_option.title()),\n",
+        "    ui.value_box(\"🏦 Common Avenue\", actual_avenue.title()),\n",
+        "    ui.value_box(\"📈 Stock Market Investors\", f\"{stock_perc}%\"),\n",
+        "    ui.value_box(\"🎯 Expected Returns\", top_expect)\n",
+        ")"
+      ],
+      "id": "5a79e4e6",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "📈 Interactive Visuals\n",
+        "@render.plotly\n",
+        "def gender_chart():\n",
+        "dff = filtered_data()\n",
+        "fig = px.histogram(\n",
+        "dff, x=\"gender\", color=\"Stock_Marktet\", barmode=\"group\",\n",
+        "title=\"Gender vs Stock Market Participation\",\n",
+        "color_discrete_sequence=[\"#0F766E\", \"#38BDF8\"]\n",
+        ")\n",
+        "fig.update_layout(title_font=dict(size=16))\n",
+        "return fig"
+      ],
+      "id": "1be98060",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "@render.plotly\n",
+        "def factor_chart():\n",
+        "dff = filtered_data()\n",
+        "fig = px.bar(\n",
+        "dff.groupby(\"Factor\")[\"age\"].count().reset_index(),\n",
+        "x=\"Factor\", y=\"age\",\n",
+        "title=\"Key Factors Influencing Investment\",\n",
+        "color=\"Factor\", color_discrete_sequence=px.colors.qualitative.Bold\n",
+        ")\n",
+        "fig.update_traces(marker_line_color=\"#0F172A\", marker_line_width=1)\n",
+        "fig.update_layout(title_font=dict(size=16))\n",
+        "return fig"
+      ],
+      "id": "32f6dc0c",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "@render.plotly\n",
+        "def objective_chart():\n",
+        "dff = filtered_data()\n",
+        "fig = px.pie(\n",
+        "dff, names=\"Objective\",\n",
+        "title=\"Distribution of Investment Objectives\",\n",
+        "color_discrete_sequence=px.colors.sequential.Teal\n",
+        ")\n",
+        "fig.update_traces(textinfo=\"percent+label\")\n",
+        "return fig"
+      ],
+      "id": "9e388df8",
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {},
+      "source": [
+        "📄 Data Explorer\n",
+        "@render.data_frame\n",
+        "def datatable():\n",
+        "return render.DataGrid(filtered_data(), height=\"100%\")"
+      ],
+      "id": "53c63e6d",
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 5
+}
