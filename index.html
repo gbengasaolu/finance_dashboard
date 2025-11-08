@@ -3,37 +3,62 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Loan Portfolio Dashboard | SI Analytics</title>
+  <title>Day 7 | Loan Portfolio Risk Dashboard</title>
   <style>
-    /* Full-screen dark theme for immersive display */
-    body {
+    /* ====== Base Layout ====== */
+    html, body {
       margin: 0;
-      background-color: #0F172A; /* SI Analytics navy */
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      overflow: hidden;
-      font-family: "Poppins", sans-serif;
-    }
-
-    img {
-      max-width: 100%;
-      max-height: 100%;
-      object-fit: contain;
-      border-radius: 10px;
-      box-shadow: 0 0 20px rgba(15, 118, 110, 0.6);
-    }
-
-    h1 {
-      position: absolute;
-      top: 30px;
+      padding: 0;
+      height: 100%;
       width: 100%;
-      text-align: center;
+      background-color: #0F172A;
+      overflow: hidden;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    /* ====== Background GIF ====== */
+    .gif-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      animation: fadeIn 2s ease-in forwards;
+      filter: brightness(1.05) contrast(1.05);
+    }
+
+    /* ====== Overlay Caption ====== */
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.25);
       color: #F9FAFB;
+      animation: fadeInText 3s ease-in forwards;
+      text-align: center;
+    }
+
+    .caption {
+      font-size: 2.5rem;
       font-weight: 600;
-      font-size: 1.5rem;
       letter-spacing: 0.5px;
+      text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
+      animation: pulse 5s infinite ease-in-out;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      color: #94A3B8;
+      margin-top: 10px;
+      letter-spacing: 1px;
+      animation: fadeInText 4s ease-in;
     }
 
     footer {
@@ -41,24 +66,57 @@
       bottom: 20px;
       width: 100%;
       text-align: center;
-      color: #94A3B8;
       font-size: 0.9rem;
+      color: #94A3B8;
+      animation: fadeInText 5s ease-in;
     }
 
     a {
       color: #38BDF8;
       text-decoration: none;
     }
+
+    /* ====== Animations ====== */
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(1.02); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes fadeInText {
+      0% { opacity: 0; transform: translateY(20px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.6); }
+      50% { text-shadow: 0 0 25px rgba(250, 204, 21, 0.8); }
+    }
+
+    /* ====== Responsive Scaling ====== */
+    @media (max-width: 768px) {
+      .caption { font-size: 1.8rem; }
+      .subtitle { font-size: 0.95rem; }
+    }
   </style>
 </head>
 <body>
-  <h1>Loan Portfolio Risk Dashboard — SI Analytics</h1>
-  <img 
-    src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.gif" 
+  <!-- Full-Page HD GIF -->
+  <img
+    src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.gif"
     alt="Loan Portfolio Dashboard Animation"
+    class="gif-bg"
   />
+
+  <!-- Cinematic Overlay Caption -->
+  <div class="overlay">
+    <div class="caption">Day 7 | Loan Portfolio Risk Dashboard</div>
+    <div class="subtitle">SI Analytics 30-Day Data Visualization Challenge</div>
+  </div>
+
+  <!-- Footer -->
   <footer>
-    © 2025 SI Analytics | <a href="https://www.sianalytics.org" target="_blank">www.sianalytics.org</a>
+    © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> |
+    Turning Data into Decisions that Matter
   </footer>
 </body>
 </html>
