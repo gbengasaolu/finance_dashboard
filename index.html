@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Day 7 | Loan Portfolio Risk Dashboard</title>
   <style>
-    /* ====== Base Layout ====== */
+    /* ===== Base Layout ===== */
     html, body {
       margin: 0;
       padding: 0;
@@ -16,7 +16,7 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* ====== Background Video ====== */
+    /* ===== Background Video ===== */
     video {
       position: fixed;
       top: 0;
@@ -24,12 +24,26 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      z-index: -1;
-      filter: brightness(1.1) contrast(1.05);
+      z-index: -2;
+      filter: brightness(1.05) contrast(1.05);
       animation: fadeIn 2s ease-in forwards;
     }
 
-    /* ====== Overlay Caption ====== */
+    /* ===== Gradient Overlay ===== */
+    .gradient-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, rgba(15, 118, 110, 0.55), rgba(56, 189, 248, 0.45));
+      mix-blend-mode: overlay;
+      z-index: -1;
+      opacity: 0.8;
+      animation: fadeIn 3s ease-in forwards;
+    }
+
+    /* ===== Overlay Text ===== */
     .overlay {
       position: absolute;
       top: 0;
@@ -40,7 +54,6 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(15, 23, 42, 0.25);
       color: #F9FAFB;
       text-align: center;
       animation: fadeInText 2.5s ease-in forwards;
@@ -49,8 +62,8 @@
     .caption {
       font-size: 2.8rem;
       font-weight: 600;
-      text-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
-      letter-spacing: 0.5px;
+      text-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
+      letter-spacing: 0.6px;
       animation: breathe 6s ease-in-out infinite;
     }
 
@@ -62,6 +75,26 @@
       animation: fadeInText 4s ease-in;
     }
 
+    /* ===== Play Button ===== */
+    .play-button {
+      margin-top: 40px;
+      padding: 12px 28px;
+      background-color: #0F766E;
+      border: none;
+      border-radius: 30px;
+      color: #F9FAFB;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      box-shadow: 0 0 10px rgba(15, 118, 110, 0.6);
+      animation: fadeInText 5s ease-in;
+    }
+    .play-button:hover {
+      background-color: #38BDF8;
+      box-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
+      transform: scale(1.05);
+    }
+
     footer {
       position: absolute;
       bottom: 20px;
@@ -69,15 +102,11 @@
       text-align: center;
       font-size: 0.9rem;
       color: #94A3B8;
-      animation: fadeInText 5s ease-in;
+      animation: fadeInText 6s ease-in;
     }
+    a { color: #38BDF8; text-decoration: none; }
 
-    a {
-      color: #38BDF8;
-      text-decoration: none;
-    }
-
-    /* ====== Animations ====== */
+    /* ===== Animations ===== */
     @keyframes fadeIn {
       0% { opacity: 0; transform: scale(1.02); }
       100% { opacity: 1; transform: scale(1); }
@@ -88,35 +117,51 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    /* Continuous soft breathing caption */
     @keyframes breathe {
       0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.7); transform: scale(1); }
       50% { text-shadow: 0 0 35px rgba(250, 204, 21, 0.9); transform: scale(1.03); }
     }
 
-    /* ====== Responsive Scaling ====== */
+    /* ===== Responsive Scaling ===== */
     @media (max-width: 768px) {
       .caption { font-size: 1.8rem; }
       .subtitle { font-size: 0.9rem; }
+      .play-button { font-size: 0.9rem; padding: 10px 22px; }
     }
   </style>
 </head>
 <body>
-  <!-- Full-Page Background Video -->
-  <video autoplay muted loop playsinline>
+  <!-- Background Video -->
+  <video autoplay muted loop playsinline id="dashboardVideo">
     <source src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.mp4" type="video/mp4">
     Your browser does not support the video tag.
   </video>
 
-  <!-- Cinematic Overlay Caption -->
-  <div class="overlay">
+  <!-- Gradient Overlay -->
+  <div class="gradient-overlay"></div>
+
+  <!-- Caption and Button -->
+  <div class="overlay" id="overlay">
     <div class="caption">Day 7 | Loan Portfolio Risk Dashboard</div>
     <div class="subtitle">SI Analytics 30-Day Data Visualization Challenge</div>
+    <button class="play-button" onclick="togglePlay()">▶ Play Dashboard</button>
   </div>
 
   <!-- Footer -->
   <footer>
     © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> | Turning Data into Decisions that Matter
   </footer>
+
+  <script>
+    // Toggle video playback and hide overlay on click
+    function togglePlay() {
+      const video = document.getElementById('dashboardVideo');
+      const overlay = document.getElementById('overlay');
+      if (video.paused) {
+        video.play();
+      }
+      overlay.style.display = 'none';
+    }
+  </script>
 </body>
 </html>
