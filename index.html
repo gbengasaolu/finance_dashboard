@@ -16,16 +16,17 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* ====== Background GIF ====== */
-    .gif-bg {
+    /* ====== Background Video ====== */
+    video {
       position: fixed;
       top: 0;
       left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      z-index: -1;
+      filter: brightness(1.1) contrast(1.05);
       animation: fadeIn 2s ease-in forwards;
-      filter: brightness(1.05) contrast(1.05);
     }
 
     /* ====== Overlay Caption ====== */
@@ -41,22 +42,22 @@
       justify-content: center;
       background: rgba(15, 23, 42, 0.25);
       color: #F9FAFB;
-      animation: fadeInText 3s ease-in forwards;
       text-align: center;
+      animation: fadeInText 2.5s ease-in forwards;
     }
 
     .caption {
-      font-size: 2.5rem;
+      font-size: 2.8rem;
       font-weight: 600;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.7);
       letter-spacing: 0.5px;
-      text-shadow: 0 0 15px rgba(56, 189, 248, 0.6);
-      animation: pulse 5s infinite ease-in-out;
+      animation: breathe 6s ease-in-out infinite;
     }
 
     .subtitle {
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       color: #94A3B8;
-      margin-top: 10px;
+      margin-top: 12px;
       letter-spacing: 1px;
       animation: fadeInText 4s ease-in;
     }
@@ -87,25 +88,25 @@
       100% { opacity: 1; transform: translateY(0); }
     }
 
-    @keyframes pulse {
-      0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.6); }
-      50% { text-shadow: 0 0 25px rgba(250, 204, 21, 0.8); }
+    /* Continuous soft breathing caption */
+    @keyframes breathe {
+      0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.7); transform: scale(1); }
+      50% { text-shadow: 0 0 35px rgba(250, 204, 21, 0.9); transform: scale(1.03); }
     }
 
     /* ====== Responsive Scaling ====== */
     @media (max-width: 768px) {
       .caption { font-size: 1.8rem; }
-      .subtitle { font-size: 0.95rem; }
+      .subtitle { font-size: 0.9rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Full-Page HD GIF -->
-  <img
-    src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.gif"
-    alt="Loan Portfolio Dashboard Animation"
-    class="gif-bg"
-  />
+  <!-- Full-Page Background Video -->
+  <video autoplay muted loop playsinline>
+    <source src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
 
   <!-- Cinematic Overlay Caption -->
   <div class="overlay">
@@ -115,8 +116,7 @@
 
   <!-- Footer -->
   <footer>
-    © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> |
-    Turning Data into Decisions that Matter
+    © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> | Turning Data into Decisions that Matter
   </footer>
 </body>
 </html>
