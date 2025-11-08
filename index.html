@@ -16,20 +16,7 @@
       font-family: 'Poppins', sans-serif;
     }
 
-    /* ===== Background Video ===== */
-    video {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      z-index: -2;
-      filter: brightness(1.05) contrast(1.05);
-      animation: fadeIn 2s ease-in forwards;
-    }
-
-    /* ===== Gradient Overlay ===== */
+    /* ===== Background Gradient ===== */
     .gradient-overlay {
       position: fixed;
       top: 0;
@@ -37,78 +24,81 @@
       width: 100%;
       height: 100%;
       background: linear-gradient(135deg, rgba(15, 118, 110, 0.55), rgba(56, 189, 248, 0.45));
-      mix-blend-mode: overlay;
-      z-index: -1;
-      opacity: 0.8;
+      z-index: 0;
+      opacity: 0.85;
+      animation: fadeIn 2s ease-in forwards;
+    }
+
+    /* ===== Video Container ===== */
+    .video-container {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      height: 80%;
+      max-width: 1280px;
+      max-height: 720px;
+      box-shadow: 0 0 25px rgba(15, 118, 110, 0.7);
+      border-radius: 10px;
+      overflow: hidden;
       animation: fadeIn 3s ease-in forwards;
+      z-index: 1;
+    }
+
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+      border-radius: 10px;
     }
 
     /* ===== Overlay Text ===== */
     .overlay {
       position: absolute;
-      top: 0;
+      top: 10%;
       left: 0;
       width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      color: #F9FAFB;
       text-align: center;
-      animation: fadeInText 2.5s ease-in forwards;
+      color: #F9FAFB;
+      animation: fadeInText 3s ease-in forwards;
+      z-index: 2;
     }
 
     .caption {
       font-size: 2.8rem;
       font-weight: 600;
-      text-shadow: 0 0 25px rgba(56, 189, 248, 0.8);
-      letter-spacing: 0.6px;
+      text-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
+      letter-spacing: 0.5px;
       animation: breathe 6s ease-in-out infinite;
     }
 
     .subtitle {
       font-size: 1.2rem;
       color: #94A3B8;
-      margin-top: 12px;
+      margin-top: 10px;
       letter-spacing: 1px;
-      animation: fadeInText 4s ease-in;
-    }
-
-    /* ===== Play Button ===== */
-    .play-button {
-      margin-top: 40px;
-      padding: 12px 28px;
-      background-color: #0F766E;
-      border: none;
-      border-radius: 30px;
-      color: #F9FAFB;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: all 0.4s ease;
-      box-shadow: 0 0 10px rgba(15, 118, 110, 0.6);
-      animation: fadeInText 5s ease-in;
-    }
-    .play-button:hover {
-      background-color: #38BDF8;
-      box-shadow: 0 0 20px rgba(56, 189, 248, 0.8);
-      transform: scale(1.05);
     }
 
     footer {
       position: absolute;
-      bottom: 20px;
+      bottom: 15px;
       width: 100%;
       text-align: center;
       font-size: 0.9rem;
       color: #94A3B8;
-      animation: fadeInText 6s ease-in;
+      z-index: 3;
+      animation: fadeInText 5s ease-in;
     }
-    a { color: #38BDF8; text-decoration: none; }
+
+    a {
+      color: #38BDF8;
+      text-decoration: none;
+    }
 
     /* ===== Animations ===== */
     @keyframes fadeIn {
-      0% { opacity: 0; transform: scale(1.02); }
+      0% { opacity: 0; transform: scale(1.03); }
       100% { opacity: 1; transform: scale(1); }
     }
 
@@ -118,7 +108,7 @@
     }
 
     @keyframes breathe {
-      0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.7); transform: scale(1); }
+      0%, 100% { text-shadow: 0 0 15px rgba(56, 189, 248, 0.8); transform: scale(1); }
       50% { text-shadow: 0 0 35px rgba(250, 204, 21, 0.9); transform: scale(1.03); }
     }
 
@@ -126,42 +116,34 @@
     @media (max-width: 768px) {
       .caption { font-size: 1.8rem; }
       .subtitle { font-size: 0.9rem; }
-      .play-button { font-size: 0.9rem; padding: 10px 22px; }
+      .video-container { width: 95%; height: 55%; }
     }
   </style>
 </head>
 <body>
-  <!-- Background Video -->
-  <video autoplay muted loop playsinline id="dashboardVideo">
-    <source src="https://raw.githubusercontent.com/gbengasaolu/finance_dashboard/main/Loan_portfolio_dash.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-
-  <!-- Gradient Overlay -->
+  <!-- Background Gradient -->
   <div class="gradient-overlay"></div>
 
-  <!-- Caption and Button -->
-  <div class="overlay" id="overlay">
+  <!-- Overlay Caption -->
+  <div class="overlay">
     <div class="caption">Day 7 | Loan Portfolio Risk Dashboard</div>
     <div class="subtitle">SI Analytics 30-Day Data Visualization Challenge</div>
-    <button class="play-button" onclick="togglePlay()">▶ Play Dashboard</button>
+  </div>
+
+  <!-- YouTube Video Embed -->
+  <div class="video-container">
+    <iframe
+      src="https://www.youtube.com/embed/cpm0rawcjZ4?autoplay=1&mute=1&loop=1&playlist=cpm0rawcjZ4&rel=0&modestbranding=1&controls=1"
+      title="Day 7 | Loan Portfolio Risk Dashboard"
+      allow="autoplay; fullscreen"
+      allowfullscreen
+    ></iframe>
   </div>
 
   <!-- Footer -->
   <footer>
-    © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> | Turning Data into Decisions that Matter
+    © 2025 <a href="https://www.sianalytics.org" target="_blank">SI Analytics</a> |
+    Turning Data into Decisions that Matter
   </footer>
-
-  <script>
-    // Toggle video playback and hide overlay on click
-    function togglePlay() {
-      const video = document.getElementById('dashboardVideo');
-      const overlay = document.getElementById('overlay');
-      if (video.paused) {
-        video.play();
-      }
-      overlay.style.display = 'none';
-    }
-  </script>
 </body>
 </html>
